@@ -11,6 +11,8 @@ Welcome to Dask-ML Benchmarks's documentation!
    :caption: Contents:
 
    auto_examples/plot_parallel_post_fit_scaling
+   auto_examples/plot_logistic_regression
+   auto_examples/plot_spectral_clustering
 
 
 

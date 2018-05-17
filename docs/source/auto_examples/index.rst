@@ -5,6 +5,46 @@
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Comparison of scaling. ">
+
+.. only:: html
+
+    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_logistic_regression_thumb.png
+
+        :ref:`sphx_glr_auto_examples_plot_logistic_regression.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_logistic_regression
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how dask-ml&#x27;s ``SpectralClustering`` scales with the number of samples, comp...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_spectral_clustering_thumb.png
+
+        :ref:`sphx_glr_auto_examples_plot_spectral_clustering.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_spectral_clustering
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates :class:`dask_ml.wrappers.ParallelPostFit`. A :class:`sklearn.svm.SVC`...">
 
 .. only:: html
