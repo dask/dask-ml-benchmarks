@@ -10,6 +10,8 @@ Welcome to Dask-ML Benchmarks's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   auto_examples/plot_parallel_post_fit_scaling
+
 
 
 Indices and tables
