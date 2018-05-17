@@ -146,9 +146,7 @@ intersphinx_mapping = {
     'python': ('https://docs.python.org/3.6', None),
     'sklearn': ('http://scikit-learn.org/stable/', None),
     'dask': ('http://dask.pydata.org/en/latest/', None),
-    'distributed': ('http://distributed.readthedocs.io/en/latest/', None),
-    'dask_searchcv': ('http://dask-searchcv.readthedocs.io/en/latest/', None),
-    'dask_glm': ('http://dask-glm.readthedocs.io/en/latest/', None),
+    'dask_lm': ('http://dask-ml.readthedocs.io/en/latest/', None),
 }
 
 sphinx_gallery_conf = {
