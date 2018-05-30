@@ -1,14 +1,11 @@
-from dask_ml.linear_model import PartialSGDClassifier
-import dask_ml
 import dask
-import dask.array as da
 import distributed
 import numpy as np
 
+import dask_ml
+from dask_ml.linear_model import PartialSGDClassifier
 
 
-
-# Generate some ground truth data 
 def make_classification_problem(n_samples, n_features, chunks,
                                 n_informative=0.1, scale=1.0, noise=0.1,
                                 seed=0):
@@ -36,7 +33,7 @@ def make_classification_problem(n_samples, n_features, chunks,
 
 
 if __name__ == "__main__":
-    # c = distributed.Client()
+    c = distributed.Client()
 
     n_samples = int(1e6)
     n_features = int(1e2)
@@ -46,7 +43,7 @@ if __name__ == "__main__":
         n_samples, n_features, chunks)
     print(f"Generating {X.nbytes / 1e9} GB of random data")
     X, y = dask.persist(X, y)
-    # distributed.wait([X, y])
+    distributed.wait([X, y])
 
     split = int(0.9 * n_samples)
     X_train, X_test = X[:split], X[split:]
@@ -55,6 +52,5 @@ if __name__ == "__main__":
     print("Fitting model...")
     model = PartialSGDClassifier(loss='log', penalty='l2', alpha=1e-4,
                                  classes=[0, 1])
-    model.fit(X_train, y_train)
+    model.fit(X_train, y_train, get=c.get)  # get to work around dask-ml-185
     print(f"accuracy: {model.score(X_test, y_test):0.3f}")
-
