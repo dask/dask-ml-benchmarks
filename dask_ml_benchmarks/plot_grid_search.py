@@ -5,21 +5,24 @@ Grid search comparision
 =======================
 
 This example shows the comparison of Dask-ML's grid search and Scikit-Learn's
-grid search. Both examples use have as many parallel jobs as the cores on the
-host machine.
+grid search, and is a modification of a Scikit-Learn example at
+`"Sample pipeline for text feature extraction and evaluation"
+<http://scikit-learn.org/stable/auto_examples/model_selection/grid_search_text_feature_extraction.html>`_.
 
-In this example, the Dask-ML grid search does do less work because it caches
-``fit`` results. See the documentation for more detail:
-https://dask-ml.readthedocs.io/en/latest/hyper-parameter-search.html
+In this example, the Dask-ML grid search does less computation because it
+caches ``fit`` results. See the documentation for a good illustration for this
+benchmark:
+https://dask-ml.readthedocs.io/en/latest/hyper-parameter-search.html.
 """
+from pprint import pprint
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-import sklearn.datasets
+from sklearn.datasets import fetch_20newsgroups
 from sklearn.linear_model import SGDClassifier
 from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 import dask_ml.model_selection
 import sklearn.model_selection
@@ -29,48 +32,68 @@ from distributed.metrics import time
 
 client = Client()
 
-data = sklearn.datasets.fetch_20newsgroups_vectorized()
-names = data.target_names
+categories = ["alt.atheism", "talk.religion.misc", "sci.space", "sci.med"]
+data = sklearn.datasets.fetch_20newsgroups(
+    subset="train", categories=categories
+)
 
-keep = ['sci.space', 'sci.med', 'alt.atheism',
-        'soc.religion.christian', 'comp.graphics',
-        'talk.religion.misc']
-labels_keep = [i for i, name in enumerate(names) if name in keep]
-idx_save = [i for i, label in enumerate(data.target)
-            if label in labels_keep]
+X = data.data
+y = data.target
+doc_lengths = [len(doc) for doc in X]
+print(
+    "Dataset has {} documents. Median length is {} words".format(
+        len(data.filenames), np.median(doc_lengths)
+    )
+)
+print("Document categories: {}".format(categories))
 
-X = data.data[idx_save]
-y = data.target[idx_save]
-
-params = {'clf__alpha': np.logspace(-6, -3, num=4),
-          'clf__loss': ['hinge', 'log', 'modified_huber'],
-          'clf__average': [True, False],
-          'clf__penalty': ['l1', 'l2'],
-          'tfidf__norm': ('l1', 'l2'),
-         }
-est = Pipeline([
-    ('tfidf', TfidfTransformer()),
-    ('clf', SGDClassifier(tol=1e-3))
-])
+params = {
+    "tfidf__norm": ["l1", "l2"],
+    "tfidf__binary": [True, False],
+    "clf__alpha": np.logspace(-6, -3, num=4),
+    "clf__loss": ["hinge", "log", "modified_huber"],
+    "clf__penalty": ["l1", "l2"],
+}
+pipeline = Pipeline(
+    [
+        ("tfidf", TfidfVectorizer()),
+        ("clf", SGDClassifier(tol=1e-3)),
+    ]
+)
 
 data = []
 
 start = time()
-grid_sklearn = sklearn.model_selection.GridSearchCV(est, params, n_jobs=-1)
+grid_sklearn = sklearn.model_selection.GridSearchCV(
+    pipeline, params, n_jobs=-1
+)
 grid_sklearn.fit(X, y)
-data += [{'library': 'scikit-learn',
-          'time': time() - start,
-          'best_score': grid_sklearn.best_score_}]
+data += [
+    {
+        "library": "scikit-learn",
+        "time": time() - start,
+        "best_score": grid_sklearn.best_score_,
+        "best_params": grid_sklearn.best_params_,
+    }
+]
 
 start = time()
-grid_dask = dask_ml.model_selection.GridSearchCV(est, params)
+grid_dask = dask_ml.model_selection.GridSearchCV(pipeline, params)
 grid_dask.fit(X, y)
-data += [{'library': 'dask-ml',
-          'time': time() - start,
-          'best_score': grid_dask.best_score_}]
+data += [
+    {
+        "library": "dask-ml",
+        "time": time() - start,
+        "best_score": grid_dask.best_score_,
+        "best_params": grid_dask.best_params_,
+    }
+]
+print("Best score: ", grid_dask.best_score_)
+print("Best parameter set:")
+pprint(grid_dask.best_params_)
 
 
 df = pd.DataFrame(data)
-ax = df.plot.bar(x='library', y='time', legend=False)
-ax.set_ylabel('Time (s)')
+ax = df.plot.bar(x="library", y="time", legend=False)
+ax.set_ylabel("Time (s)")
 plt.xticks(rotation=0)
