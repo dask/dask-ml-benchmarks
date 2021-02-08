@@ -62,6 +62,26 @@
    :hidden:
 
    /auto_examples/plot_parallel_post_fit_scaling
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows the comparison of Dask-ML&#x27;s grid search and Scikit-Learn&#x27;s grid search, and ...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_grid_search_thumb.png
+
+        :ref:`sphx_glr_auto_examples_plot_grid_search.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_grid_search
 .. raw:: html
 
     <div style='clear:both'></div>
@@ -71,17 +91,18 @@
 .. only :: html
 
  .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-gallery
 
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Python source code: auto_examples_python.zip <//Users/taugspurger/sandbox/dask-ml-benchmarks/docs/source/auto_examples/auto_examples_python.zip>`
+    :download:`Download all examples in Python source code: auto_examples_python.zip <//Users/ssievert/Developer/stsievert/dask-ml-benchmarks/docs/source/auto_examples/auto_examples_python.zip>`
 
 
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//Users/taugspurger/sandbox/dask-ml-benchmarks/docs/source/auto_examples/auto_examples_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//Users/ssievert/Developer/stsievert/dask-ml-benchmarks/docs/source/auto_examples/auto_examples_jupyter.zip>`
 
 
 .. only:: html
